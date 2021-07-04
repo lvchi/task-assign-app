@@ -48,6 +48,7 @@
 
     
 
+    <link href="{{ asset('css/dynamic-table.css') }}" rel="stylesheet">
 </head>
 
 <body>
@@ -71,12 +72,7 @@
         </nav>
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                {{-- <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a> --}}
-                {{-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button> --}}
+
 
                 <button class="navbar-toggler d-inline" id="sidebarCollapse" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent">
@@ -84,11 +80,7 @@
                 </button>
 
 
-                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
-                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                    aria-label="Toggle navigation">
-                    <i class="fas fa-align-justify"></i>
-                </button>
+
 
 
                 <div class="navbar-collapse collapse" id="navbarSupportedContent">
