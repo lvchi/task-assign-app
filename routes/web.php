@@ -1,6 +1,9 @@
 <?php
 
 
+use App\Http\Controllers\JobsController;
+use App\Http\Controllers\ProjectsController;
+use App\Http\Controllers\AssigneeListController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectTypeController;
@@ -20,6 +23,7 @@ use App\Http\Controllers\ConfigController;
 |
 */
 
+Route::redirect('/', '/jobs', 301);
 
 
 // Project
@@ -39,6 +43,7 @@ Route::prefix('project-type')->group(function () {
     Route::post('/update/{id}', [ProjectTypeController::class, 'update'])->name('project-type.update');
     Route::get('/delete/{id}', [ProjectTypeController::class, 'destroy'])->name('project-type.destroy');
 });
+Route::get('/assignee-list', [AssigneeListController::class, 'index'])->name('assignee-list');
 
 // Priorities
 Route::prefix('priority')->group(function () {
