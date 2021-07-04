@@ -31,7 +31,17 @@
                             <input type="hidden" name="project_id" id="project_id">
                         </div>
 
-                          
+                         
+                        {{-- test multiple search --}}
+                        <div class="form-group-row mb-3">
+                            @include('components.multiple-search-input', [
+                                'name' => 'test', 
+                                'label' => 'Test label', 
+                                'options' => ['ABC', 'XYZ']
+                            ])
+                            <input type="hidden" name="parent_id" id="parent_id">
+                        </div>
+
         
                         <div class="form-group-row mb-3">
                             @include('components.select', [

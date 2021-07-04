@@ -74,3 +74,21 @@ Route::prefix('process-method')->group(function () {
 
 // Config
 Route::get('config',[ConfigController::class, 'list'])->name('config.list');
+Route::get('/jobs', [JobsController::class, 'index']);
+Route::get('/jobs/create', [JobsController::class, 'create']);
+Route::get('/jobs/edit', [JobsController::class, 'edit']);
+Route::get('/jobs/{id}', [JobsController::class, 'show']);
+Route::post('/jobs', [JobsController::class, 'action'])->name('jobs.action');
+Route::put('/jobs/{id}', [JobsController::class, 'update']);
+Route::delete('/jobs/{id}', [JobsController::class, 'delete']);
+
+
+Route::get('/projects', [ProjectsController::class, 'index']);
+Route::get('/projects/{id}', [ProjectsController::class, 'show']);
+Route::post('/projects', [ProjectsController::class, 'action']);
+Route::get('/projects/{id}/edit', [ProjectsController::class, 'edit']);
+Route::put('/projects/{id}', [ProjectsController::class, 'update']);
+Route::delete('/projects/{id}', [ProjectsController::class, 'destroy']);
+
+
+

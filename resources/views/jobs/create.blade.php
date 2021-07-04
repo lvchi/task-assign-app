@@ -1,5 +1,5 @@
 @extends('layouts.job-crud', [
-	'routeName' => 'jobs.store',
+	'routeName' => 'jobs.action',
 	'method' => 'POST', 
 	'staff' => $staff,
 	'jobs' => $jobs,

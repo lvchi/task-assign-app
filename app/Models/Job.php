@@ -22,6 +22,9 @@ class Job extends Model
         'period_unit' => self::PERIOD_UNIT_DAY,
     ];
 
+    
+    
+    protected $fillable = ['assigner_id', 'code', 'job_type_id', 'name', 'project_id', 'priority_id', 'period', 'period_unit', 'parent_id', 'deadline', 'lsx_amount', 'assign_amount', 'description', 'status'];
     public function parent()
     {
         return $this->belongsTo(Job::class, 'parent_id');
@@ -54,7 +57,7 @@ class Job extends Model
 
     public function assignee()
     {
-        return $this->belongsToMany(Staff::class, 'job_assigns')->using(JobAssign::class)->withPivot('role', 'direct_report', 'sms');
+        return $this->belongsToMany(Staff::class, 'job_assigns')->using(JobAssign::class)->withPivot('role', 'direct_report', 'sms', 'status', 'deny_reason');
     }
 
     public function updateHistories()
