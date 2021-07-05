@@ -23,16 +23,20 @@ class Job extends Model
     ];
 
     
-    
     protected $fillable = ['assigner_id', 'code', 'job_type_id', 'name', 'project_id', 'priority_id', 'period', 'period_unit', 'parent_id', 'deadline', 'lsx_amount', 'assign_amount', 'description', 'status'];
     public function parent()
     {
         return $this->belongsTo(Job::class, 'parent_id');
     }
 
+    public function childJobs()
+    {
+        return $this->hasMany(Job::class, 'parent_id');
+    }
+
     public function type()
     {
-        return $this->belongsTo(JobType::class);
+        return $this->belongsTo(JobType::class, 'job_type_id');
     }
 
     public function project()
