@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\File;
 use App\Models\Job;
 use App\Models\JobAssign;
 use App\Models\JobType;
@@ -34,62 +35,47 @@ class JobsController extends Controller
 
     public function create()
     {
-        // to-do
-        // get all jobs created
-        // get all staff info 
-        // get all parent jobs 
-        // get all projects
-        // get all job types 
-        // get all priorities 
-        // get all process methods
-
-        $jobs = Job::all();
+        $jobs = Job::orderBy('created_at', 'DESC')->get();
         $staff = Staff::all();
-
         $projects = Project::all();
-        
         $jobTypes = JobType::all();
         $priorities = Priority::all();
         $processMethods = ProcessMethod::all();
-         
         return view('jobs.create', compact('staff', 'jobs', 'projects', 'jobTypes', 'priorities', 'processMethods'));
 
     }
 
 
-
     public function action(Request $request)
     {
-        dd($request->all());
+
+        
         $action = $request->input('action');
         switch ($action) {
             case 'save': 
                 $result = $this->save($request->all());
                 if ($result['status']) {
-                    return view('jobs.create');
+                    return redirect()->route('jobs.create')->with('success', $result['message']);
                 }
                 else {
-                    return view('jobs.create', $result['message']);
+                    return redirect()->route('jobs.create')->withErrors($result['message']);
                 }
             case 'save_copy': 
                 $result = $this->save($request->all());
                 if ($result['status']) {
-                    $job = $result['message'];
-                    return redirect()->to('jobs.create', 200)->with('job', $job);
+                    return redirect()->route('jobs.create')->withInput();
                 }
                 else {
-                    return redirect()->to('jobs.create', 400)->with('error', $result['message']);
+                    return redirect()->refresh()->withErrors($result['message']);
                 }
-            case 'edit': 
-                return view('jobs.create', ['edit' => true]); 
             case 'delete': 
                 $id = $request->input('job_id');
                 $result = $this->destroy($id);
                 if ($result) {
-                    return redirect()->to('jobs.create')->with('message', 'Xóa công việc thành công');
+                    return redirect()->route('jobs.create')->with('message', 'Xóa công việc thành công');
                 }
             case 'search': 
-                return redirect()->to('jobs.search');
+                return redirect()->route('jobs.search');
         }
 
 
@@ -103,14 +89,25 @@ class JobsController extends Controller
     } 
 
     private function save($data) {
-        $validator = Validator::make($data, [
-            'code' => 'unique:jobs', 
-            'assigner_id' => 'required', 
-            'name' => 'required', 
-            'deadline' => ['required', 'date'],
-        ]);
+        $jobId = $data['job_id'];
+        if ($jobId) {
+            $validator = Validator::make($data, [ 
+                'assigner_id' => 'required', 
+                'name' => ['required', 'string'], 
+                'deadline' => ['required', 'date'],
+            ]);
+        }
+        else {
+            $validator = Validator::make($data, [
+                'code' => 'unique:jobs', 
+                'assigner_id' => 'required', 
+                'name' => ['required', 'string'], 
+                'deadline' => ['required', 'date'],
+            ]);
+        }
+
         if ($validator->fails()) {
-            return array('status' => false, 'message' => $validator->errors());
+            return ['status' => false, 'message' => $validator->errors()];
         }
         $tableCols = DB::getSchemaBuilder()->getColumnListing('jobs');
         $jobData = array_filter(
@@ -118,12 +115,34 @@ class JobsController extends Controller
             fn($key) => in_array($key, $tableCols),
             ARRAY_FILTER_USE_KEY
         );
+        
         try {
-            $job = Job::create($jobData);
-            return array('status' => true, 'message' => $job);
+            if ($jobId) {
+                $job = Job::findOrFail($jobId);
+                $job->update($jobData);
+            }
+            else {
+                $job = Job::create($jobData);
+            }
+        
+            if (isset($data['job_files'])) {
+                $files = $data['job_files'];
+                foreach ($files as $file) {
+                    $filePath = $file->store(File::UPLOAD_DIR, 'public');
+                    $fileName = explode('/', $filePath)[2];
+                    $newFile = File::create([
+                        'staff_id' => $job->assigner_id, 
+                        'name' => $fileName,
+                        'dir' => File::UPLOAD_DIR
+                    ]);
+                    $job->files()->attach($newFile->id);
+                }
+            }
+            $message = $jobId ? 'Sửa công việc thành công' : 'Thêm công việc thành công';
+            return ['status' => true, 'message' => $message];
         }
         catch (Exception $e) {
-            return array('status' => false, 'message' => $e->getMessage());
+            return ['status' => false, 'message' => $e->getMessage()];
         }
         
         //TODO: insert into job_assigns table

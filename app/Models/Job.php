@@ -51,7 +51,7 @@ class Job extends Model
 
     public function files()
     {
-        return $this->belongsToMany(File::class);
+        return $this->belongsToMany(File::class, 'job_files');
     }
 
     public function assigner()
