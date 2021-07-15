@@ -8,6 +8,8 @@ use App\Http\Controllers\PriorityController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\ProcessMethodController;
 use App\Http\Controllers\TimeSheetController;
+use App\Http\Controllers\ConfigController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,48 +22,6 @@ use App\Http\Controllers\TimeSheetController;
 |
 */
 
-Route::redirect('/', '/jobs', 301);
-
-
-Route::get('/jobs', function () {
-    return view('jobs.index');
-})->name('jobs');
-
-Route::get('/jobs/create', function () {
-    return view('jobs.create');
-})->name('jobs.create');
-
-Route::get('/jobs/search', function () {
-    return view('jobs.search');
-})->name('jobs.search');
-
-
-Route::get('/amount-confirm', function () {
-    return view('jobs.amount-confirm');
-});
-
-Route::get('/assignee-list', [AssigneeListController::class, 'index'])->name('assignee-list');
-
-Route::get('/jobs/update-history', function () {
-    return view('jobs.update-history');
-});
-
-Route::get('/jobs/workplan', function () {
-    return view('jobs.workplan');
-});
-
-Route::get('/project-types/create', function () {
-    return view('welcome');
-});
-Route::get('/priorities', function () {
-    return view('priority');
-});
-
-Route::get('/configurations', function () {
-    return view('configuration');
-});
-
-//================================== ROUTE VIEW =====================================================//
 
 
 
@@ -108,6 +68,12 @@ Route::prefix('process-method')->group(function () {
     Route::get('/edit/{id}', [ProcessMethodController::class, 'edit'])->name('process-method.edit');
     Route::post('/update/{id}', [ProcessMethodController::class, 'update'])->name('process-method.update');
     Route::get('/delete/{id}', [ProcessMethodController::class, 'destroy'])->name('process-method.destroy');
+});
+
+//configurations
+Route::prefix('configurations')->group(function (){
+    Route::get('/',[ConfigController::class, 'list'])->name('config.list');
+    Route::post('/update',[ConfigController::class, 'update'])->name('config.update');
 });
 
 //Time Sheet

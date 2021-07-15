@@ -2,60 +2,85 @@
 
 @section('content')
     <div class="container">
-        <form action="#" class="offset-4">
+        <fieldset class="p-3 mb-3" style="border: 1px solid; border-radius: 15px">
+            <legend class="w-auto">Cấu hình giao việc</legend>
+            @include('components.flash-message')
+            <form action="{{route('config.update')}}" class="offset-4" method="POST">
+            @csrf
             <div class="form-group-row mb-3">
                 @include('components.select', [
                     'name' => 'period', 
                     'label' => 'Kỳ',
-                    'options' => ['Không', 'Bắt buộc'],
+                    'options' => [
+                        ['id' => 0, 'name' => 'Không'],
+                        ['id' => 1, 'name' => 'Có'],
+                    ],
+                    'check' => $config[0]->value,
                 ])
             </div>
             <div class="form-group-row mb-3">
                 @include('components.select', [
-                    'name' => 'project_code', 
+                    'name' => 'job_code',
                     'label' => 'Mã công việc',
-                    'options' => ['Không', 'Bắt buộc'],
+                    'options' => [
+                        ['id' => 0, 'name' => 'Không'],
+                        ['id' => 1, 'name' => 'Có'],
+                    ],
+                    'check' => $config[1]->value,
                 ])
             </div>
             <div class="form-group-row mb-3">
                 @include('components.select', [
-                    'name' => 'lsx_amount', 
+                    'name' => 'production_volume',
                     'label' => 'Khối lượng LSX',
-                    'options' => ['Không', 'Bắt buộc'],
+                    'options' => [
+                        ['id' => 0, 'name' => 'Không'],
+                        ['id' => 1, 'name' => 'Có'],
+                    ],
+                    'check' => $config[2]->value,
                 ])
             </div>
-
             <div class="form-group-row mb-3">
                 @include('components.select', [
-                    'name' => 'assign_amount', 
+                    'name' => 'volume_interface',
                     'label' => 'Khối lượng giao',
-                    'options' => ['Không', 'Bắt buộc'],
+                    'options' => [
+                        ['id' => 0, 'name' => 'Không'],
+                        ['id' => 1, 'name' => 'Có'],
+                    ],
+                    'check' => $config[3]->value,
                 ])
             </div>
-
             <div class="form-group-row mb-3">
                 @include('components.select', [
-                    'name' => 'job_accept', 
+                    'name' => 'get_job',
                     'label' => 'Nhận việc',
-                    'options' => ['Không', 'Bắt buộc'],
+                    'options' => [
+                        ['id' => 0, 'name' => 'Không'],
+                        ['id' => 1, 'name' => 'Có'],
+                    ],
+                    'check' => $config[4]->value,
                 ])
             </div>
-
             <div class="form-group-row mb-5">
                 @include('components.select', [
-                    'name' => 'work_plan', 
+                    'name' => 'Implementation_plan',
                     'label' => 'Kế hoạch thực hiện',
-                    'options' => ['Không', 'Bắt buộc'],
+                    'options' => [
+                        ['id' => 0, 'name' => 'Không'],
+                        ['id' => 1, 'name' => 'Có'],
+                    ],
+                    'check' => $config[5]->value,
                 ])
             </div>
-            <div class="row offset-2">
-                <button type="submit" class="btn btn-info">
-                    <i class="fas fa-save"></i>
-                    <span>Lưu</span> 
-                </button>
-            </div>
-            
+
+            @include('components.buttons', [
+                    'buttons' => [
+                        ['class' => 'btn btn-primary', 'iconClass' => 'fas fa-save', 'value' => 'Lưu' ],
+                    ]
+            ])
+
         </form>
-            
+        </fieldset>
     </div>
 @endsection

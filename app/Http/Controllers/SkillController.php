@@ -25,7 +25,7 @@ class SkillController extends Controller
         $skill = new Skill();
         // check mã code trùng hay không?
         if (Skill::where('code', '=', $request->skill_code)->exists()) {
-            return redirect()->route('project.list')->with('success','Mã code đã tồn tại');
+            return redirect()->route('skill.list')->with('success','Mã code đã tồn tại');
         }
         $this->insertData($request, $skill);
         return redirect()->route('skill.list')->with('success','Đã thêm kỹ năng thành công');
