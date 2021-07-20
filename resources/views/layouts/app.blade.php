@@ -66,13 +66,16 @@
             </div>
 
             @include('components.sidebar-content', ['options' => [
-            'Công việc', 'Nhận việc'
+                ['link' => '/jobs', 'value' => 'Tìm kiếm công việc'],
+                ['link' => '/jobs/search', 'value' => 'Nhận việc'],
+                ['link' => '/jobs/create', 'value' => 'Tạo công việc mới'],
+                ['link' => '/jobs', 'value' => 'Công việc đang xử lý'],
+                ['link' => '/jobs', 'value' => 'Công việc cần xử lý']
             ]])
 
         </nav>
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-
 
                 <button class="navbar-toggler d-inline" id="sidebarCollapse" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent">
