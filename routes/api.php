@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\JobsController;
+use App\Http\Controllers\UpdateJobHistoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,3 +24,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('department', [DepartmentController::class, 'index'])->name('deparment.list');
 
 Route::get('jobs/{id}', [JobsController::class, 'show'])->name('jobs.show');
+
+Route::get('update-job-histories', [UpdateJobHistoryController::class, 'index'])->name('update_job_histories.index');
