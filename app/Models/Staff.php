@@ -43,4 +43,8 @@ class Staff extends Model
     {
         return $this->hasMany(AmountConfirm::class);
     }
+
+    public function jobAssign(){
+        return $this->hasMany(JobAssign::class);
+    }
 }

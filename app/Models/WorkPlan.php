@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class WorkPlan extends Model
 {
     use HasFactory;
-    public function jobAssigned()
+    public function jobAssign()
     {
         return $this->belongsTo(JobAssign::class);
     }

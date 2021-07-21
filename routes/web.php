@@ -8,6 +8,7 @@ use App\Http\Controllers\PriorityController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\ProcessMethodController;
 use App\Http\Controllers\ConfigController;
+use App\Http\Controllers\FreeTimeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,3 +70,9 @@ Route::prefix('process-method')->group(function () {
 
 // Config
 Route::get('config',[ConfigController::class, 'list'])->name('config.list');
+
+// FreeTime
+Route::prefix('free-time')->group(function () {
+    Route::get('/', [FreeTimeController::class, 'list'])->name('free-time.list');
+    Route::post('/search', [FreeTimeController::class, 'search'])->name('free-time.search');
+});
