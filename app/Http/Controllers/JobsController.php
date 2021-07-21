@@ -91,6 +91,24 @@ class JobsController extends Controller
         return response($job);
     }
 
+    public function create($jobId=null)
+    {
+        
+        $jobs = Job::orderBy('created_at', 'DESC')->paginate(15);
+        $staff = Staff::all();
+        $projects = Project::all();
+        $jobTypes = JobType::all();
+        $priorities = Priority::all();
+        $processMethods = ProcessMethod::all();
+    
+        if ($jobId)
+            return view('jobs.create', compact('staff', 'jobs', 'projects', 'jobTypes', 'priorities', 'processMethods', 'jobId'));
+        
+        return view('jobs.create', compact('staff', 'jobs', 'projects', 'jobTypes', 'priorities', 'processMethods'));
+
+    }
+
+
     public function detailAction(Request $request)
     {   
         $action = $request->input('action');
@@ -137,22 +155,6 @@ class JobsController extends Controller
         }
     }
 
-    public function create($jobId=null)
-    {
-        
-        $jobs = Job::orderBy('created_at', 'DESC')->paginate(15);
-        $staff = Staff::all();
-        $projects = Project::all();
-        $jobTypes = JobType::all();
-        $priorities = Priority::all();
-        $processMethods = ProcessMethod::all();
-    
-        if ($jobId)
-            return view('jobs.create', compact('staff', 'jobs', 'projects', 'jobTypes', 'priorities', 'processMethods', 'jobId'));
-        
-        return view('jobs.create', compact('staff', 'jobs', 'projects', 'jobTypes', 'priorities', 'processMethods'));
-
-    }
 
     
 
@@ -200,12 +202,6 @@ class JobsController extends Controller
                 $job->update(['status' => 'active']);
 
                 
-
-
-                
-
-                // $jobs = Job::orderBy('created_at', 'DESC')->paginate(15);
-
 
                 return view('jobs.job-detail', [
                     'jobs' => $jobs,
