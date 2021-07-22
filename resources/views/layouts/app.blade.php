@@ -54,33 +54,36 @@
 <body>
     <div class="overlay"></div>
     <div id="app">
-        <nav id="sidebar">
-            <div id="dismiss">
-                <i class="fas fa-arrow-left"></i>
-            </div>
 
-            <div class="sidebar-header">
-                <h3>
-                    <a class="navbar-brand" href="{{ url('/jobs') }}">{{ config('app.name', 'Laravel') }}</a>
-                </h3>
-            </div>
-
-            @include('components.sidebar-content', ['options' => [
-                ['link' => '/jobs', 'value' => 'Tìm kiếm công việc'],
-                ['link' => '/jobs/search', 'value' => 'Nhận việc'],
-                ['link' => '/jobs/create', 'value' => 'Tạo công việc mới'],
-                ['link' => '/jobs', 'value' => 'Công việc đang xử lý'],
-                ['link' => '/jobs', 'value' => 'Công việc cần xử lý']
-            ]])
-
-        </nav>
+        
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
 
-                <button class="navbar-toggler d-inline" id="sidebarCollapse" type="button" data-toggle="collapse"
-                    data-target="#navbarSupportedContent">
+                <nav id="sidebar">
+                    <div id="dismiss">
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+    
+                    <div class="sidebar-header">
+                        <h3>
+                            <a class="navbar-brand" href="{{ url('/jobs') }}">{{ config('app.name', 'Laravel') }}</a>
+                        </h3>
+                    </div>
+    
+                    @include('components.sidebar-content', ['options' => [
+                        ['link' => '/jobs', 'value' => 'Tìm kiếm công việc'],
+                        ['link' => '/jobs/search', 'value' => 'Nhận việc'],
+                        ['link' => '/jobs/create', 'value' => 'Tạo công việc mới'],
+                        ['link' => '/jobs', 'value' => 'Công việc đang xử lý'],
+                        ['link' => '/jobs', 'value' => 'Công việc cần xử lý']
+                    ]])
+    
+                </nav>
+
+                <button class="navbar-toggler d-inline" id="sidebarCollapse" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
 
 
 
@@ -98,13 +101,13 @@
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Đăng nhập') }}</a>
                                 </li>
                             @endif
 
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Đăng ký') }}</a>
                                 </li>
                             @endif
                         @else
