@@ -20,16 +20,14 @@ use Illuminate\Support\Facades\Validator;
 
 class JobsController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
+
 
     public function index(Request $request)
     {
 
 
         if ($request->has(['type', 'staff-id'])) {
+           
             $type = $request->input('type');
             $staffId = $request->input('staff-id');
             
@@ -113,7 +111,6 @@ class JobsController extends Controller
     {   
         $action = $request->input('action');
         
-        // dd($request->all());
         
         switch ($action) {
             
@@ -480,9 +477,7 @@ class JobsController extends Controller
     }
 
 
-    private function handleUpdateStatus($reject = false) {
 
-    }
 
 
     private function getHandlingJobs($staffId, $condition=[]) 

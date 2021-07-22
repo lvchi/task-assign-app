@@ -28,8 +28,10 @@ class WorkPlanController extends Controller
             
         }
         
-        $jobId = session('job_id');
-        $staffId = session('staff_id');
+        $jobId = session('job_id') ? session('job_id') : $request->input('job_id');
+        
+        // TODO: get authenticated user id
+        $staffId = session('staff_id') ? session('staff_id') : 10;
 
         $jobAssign = JobAssign::where([
             'job_id' => $jobId,
