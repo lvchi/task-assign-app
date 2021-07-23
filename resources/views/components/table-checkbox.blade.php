@@ -1,15 +1,25 @@
-<table class="table-hover table table-bordered">
+<table class="table table-bordered">
     <thead>
         <tr>
+            <th>Điều kiện</th>
             @foreach ($fields ?? [] as $key => $value)
                 <th scope="col">{{ __("title.$key") }}</th>
             @endforeach
         </tr>
     </thead>
     <tbody>
+    <tr>
+
     @foreach ($items ?? [] as $item)
-        <tr>
+            <tr>
+                <td>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" name="check" class="custom-control-input" id="check" value="">
+                        <label class="custom-control-label" for="check"></label>
+                    </div>
+                </td>
             @foreach ($fields ?? [] as $key => $value)
+
                 @if ($value === 'pattern.modified')
                     <td><a href="{{ route($edit_route ?? 'edit', ['id' => $item->id]) }}"
                            class="btn btn-primary">{{ __('Sửa') }}</a>
@@ -32,6 +42,8 @@
                 @endif
             @endforeach
         </tr>
-    @endforeach
+        @endforeach
+    </tr>
+
     </tbody>
 </table>
