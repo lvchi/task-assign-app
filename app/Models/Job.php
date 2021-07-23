@@ -23,7 +23,24 @@ class Job extends Model
     ];
 
     
-    protected $fillable = ['assigner_id', 'code', 'job_type_id', 'name', 'project_id', 'priority_id', 'period', 'period_unit', 'parent_id', 'deadline', 'lsx_amount', 'assign_amount', 'description', 'status'];
+    protected $fillable = [
+        'assigner_id', 
+        'code', 
+        'job_type_id', 
+        'name', 
+        'project_id', 
+        'priority_id', 
+        'period', 
+        'period_unit', 
+        'parent_id', 
+        'deadline', 
+        'lsx_amount', 
+        'assign_amount', 
+        'description', 
+        'status'
+    ];
+
+    
     public function parent()
     {
         return $this->belongsTo(Job::class, 'parent_id');

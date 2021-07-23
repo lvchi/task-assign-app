@@ -21,88 +21,86 @@ use Illuminate\Support\Facades\Validator;
 class JobsController extends Controller
 {
 
+    const DEFAULT_PAGINATE = 15;
+
 
     public function index(Request $request)
     {
 
 
-        if ($request->has(['type', 'staff-id'])) {
-           
-            $type = $request->input('type');
-            $staffId = $request->input('staff-id');
-            
-            $jobTypes = JobType::orderBy('name')->get();
-            $assigners = Staff::orderBy('name')->get();
-            $projects = Project::orderBy('name')->get();
-
-            $condition = [];
-            if ($request->method() === 'POST') {
-                
-                foreach ($request->all() as $key => $value) {
-                    if (!in_array($key, ['type', 'staff-id', 'from_date', 'to_date']) && $value)
-                        $condition[$key] = $value;
-                    
-                    if ($key == 'from_date' && $value) {
-                        $condition[] = ['deadline', '>=' , $value];
-                    }
-
-                    if ($key == 'to_date' && $value) {
-                        $condition[] = ['deadline', '<=', $value];
-                    } 
-
-                }
-              
-            }
-            
-
-            switch ($type) {
-
-                case 'pending': 
-                    [$newAssignedJobs, $unassignedJobs] = $this->getPendingJobs($staffId, $condition);
-                    return view('jobs.pending-jobs', compact('newAssignedJobs', 'unassignedJobs', 'jobTypes', 'assigners', 'projects'));
-                
-                case 'handling': 
-                    [$directJobs, $relatedJobs] = $this->getHandlingJobs($staffId, $condition);
-                    return view('jobs.handling-jobs', compact('directJobs', 'relatedJobs', 'jobTypes', 'assigners', 'projects'));
-
-                case 'assigner': 
-                    $createdJobs = $this->getAssignerJobs($staffId, $condition);
-                    dd($createdJobs);
-
-                default: 
-                    break;
-
-                
-            }
-
-        }
-        else {
+        if (!$request->has(['type', 'staff-id'])) {
             $jobs = Job::all();
-            return view('jobs.index', compact($jobs));
+            return view('jobs.index', compact($jobs));    
+        }
+
+
+        $type = $request->input('type');
+        $staffId = $request->input('staff-id');
+        
+        $jobTypes = JobType::orderBy('name')->get();
+        $assigners = Staff::orderBy('name')->get();
+        $projects = Project::orderBy('name')->get();
+
+        $condition = [];
+        if ($request->method() === 'POST') {
+            
+            foreach ($request->all() as $key => $value) {
+                if (!in_array($key, ['type', 'staff-id', 'from_date', 'to_date']) && $value)
+                    $condition[$key] = $value;
+                
+                if ($key == 'from_date' && $value) {
+                    $condition[] = ['deadline', '>=' , $value];
+                }
+
+                if ($key == 'to_date' && $value) {
+                    $condition[] = ['deadline', '<=', $value];
+                } 
+
+            }
+            
+        }
+        
+
+        switch ($type) {
+
+            case 'pending': 
+                [$newAssignedJobs, $unassignedJobs] = $this->getPendingJobs($staffId, $condition);
+                return view('jobs.pending-jobs', compact('newAssignedJobs', 'unassignedJobs', 'jobTypes', 'assigners', 'projects'));
+            
+            case 'handling': 
+                [$directJobs, $relatedJobs] = $this->getHandlingJobs($staffId, $condition);
+                return view('jobs.handling-jobs', compact('directJobs', 'relatedJobs', 'jobTypes', 'assigners', 'projects'));
+
+            case 'assigner': 
+                $createdJobs = $this->getAssignerJobs($staffId, $condition);
+                dd($createdJobs);
+
+            default: 
+                break;
+
+            
         }
 
     }
 
     public function show($id)
     {
-        $job = Job::with(['parent', 'type', 'project', 'priority', 'assigner'])->where('id', $id)->get()[0];
+        $job = Job::with(['parent', 'type', 'project', 'priority', 'assigner'])->where('id', $id)->first();
         return response($job);
     }
 
     public function create($jobId=null)
     {
         
-        $jobs = Job::orderBy('created_at', 'DESC')->paginate(15);
+        $jobs = Job::orderBy('created_at', 'DESC')->paginate($this::DEFAULT_PAGINATE);
         $staff = Staff::all();
         $projects = Project::all();
         $jobTypes = JobType::all();
         $priorities = Priority::all();
         $processMethods = ProcessMethod::all();
     
-        if ($jobId)
-            return view('jobs.create', compact('staff', 'jobs', 'projects', 'jobTypes', 'priorities', 'processMethods', 'jobId'));
         
-        return view('jobs.create', compact('staff', 'jobs', 'projects', 'jobTypes', 'priorities', 'processMethods'));
+        return view('jobs.create', compact('staff', 'jobs', 'projects', 'jobTypes', 'priorities', 'processMethods', 'jobId'));
 
     }
 
@@ -133,21 +131,27 @@ class JobsController extends Controller
                 
 
             case 'finish':
+                // TODO: finish function
                 break;
 
             case 'search': 
+                // TODO: redirect to search view
                 break;
             
             case 'assign':
+                // TODO: assign view function
                 break;
             
             case 'timesheet': 
+                // TODO: timesheet view function
                 break;
 
             case 'amount_confirm': 
+                // TODO: amount confirm view function
                 break;
 
             case 'exchange': 
+                // TODO: exchange view function
                 break;
         }
     }
@@ -438,7 +442,7 @@ class JobsController extends Controller
                         
     
                     }
-                    // dd($jobUpdates);
+
                     if ($jobUpdates) {
                         $job->updateHistories()->saveMany($jobUpdates);
                     }
@@ -611,15 +615,7 @@ class JobsController extends Controller
         return $jobs;
     }
     
-    private function reformatCreatedJobs($jobs)
-    {
 
-    }
-
-    private function reformatAllJobs($jobs)
-    {
-
-    }
     
 
 

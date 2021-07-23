@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 class WorkPlanController extends Controller
 {
-    
+    const DEFAULT_PAGINATE = 15;
     public function create(Request $request) 
     {
         $jobAssignId = session('job_assign_id');
@@ -86,7 +86,7 @@ class WorkPlanController extends Controller
     
     
                 // TODO: get id of chu tri process method
-                $mainProcessMethod = ProcessMethod::all()[0];
+                $mainProcessMethod = ProcessMethod::first();
     
                 $newJobAssign = JobAssign::create([
                     'job_id' => $jobId,
@@ -105,37 +105,33 @@ class WorkPlanController extends Controller
             $insertData = $request->has('job_assign_id') ? $request->all() : array_merge(['job_assign_id' => $jobAssignId], $request->all());
             WorkPlan::create($insertData);
 
-            if (!$workPlans->count()) {
-                
-                $jobAssign = JobAssign::where('id', $jobAssignId)->with('job')->first();
-    
-
-
-                if ($jobAssign->status != 'accepted')
-                    $jobAssign->update(['status' => 'accepted']);
-
-                $job = $jobAssign->job;
-                
-
-                
-                if ($job->status === 'pending') {
-
-                    $job->update(['status' => 'active']);
-
-                    // TODO get handling and related jobs
-                    $jobs = Job::orderBy('created_at', 'DESC')->paginate(15);
-
-                    return view('jobs.job-detail', [
-                        'jobs' => $jobs,
-                        'jobId' => $job->id,
-                        'success' => 'Nhận việc thành công'
-                    ]);
-
-                }
-
+            if ($workPlans->count() > 0) {
                 return redirect()->route('workplans.create')->with([
                     'job_assign_id' => $jobAssignId, 
                     'success' => 'Thêm kế hoạch công việc thành công'
+                ]);
+            }
+
+
+            $jobAssign = JobAssign::where('id', $jobAssignId)->with('job')->first();
+
+            if ($jobAssign->status != 'accepted'){
+                $jobAssign->update(['status' => 'accepted']);
+            }
+
+            $job = $jobAssign->job;
+            
+            if ($job->status === 'pending') {
+
+                $job->update(['status' => 'active']);
+
+                // TODO get handling and related jobs
+                $jobs = Job::orderBy('created_at', 'DESC')->paginate($this::DEFAULT_PAGINATE);
+
+                return view('jobs.job-detail', [
+                    'jobs' => $jobs,
+                    'jobId' => $job->id,
+                    'success' => 'Nhận việc thành công'
                 ]);
 
             }
@@ -144,6 +140,9 @@ class WorkPlanController extends Controller
                 'job_assign_id' => $jobAssignId, 
                 'success' => 'Thêm kế hoạch công việc thành công'
             ]);
+
+
+
         } 
         catch (Exception $e) {
             return redirect()->back()->withInput()->withErrors(['errorMessage', $e->getMessage()]);
@@ -166,10 +165,7 @@ class WorkPlanController extends Controller
 
             try {
                 
-                foreach($workPlanIds as $id) {
-                    $workPlan = WorkPlan::find($id);
-                    $workPlan->delete();
-                }
+                WorkPlan::whereIn('id', $workPlanIds)->delete();
 
                 return redirect()->back()->with('success', 'Xóa kế hoạch thực hiện thành công');
             
