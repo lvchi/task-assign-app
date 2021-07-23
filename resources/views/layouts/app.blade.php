@@ -71,11 +71,8 @@
                     </div>
     
                     @include('components.sidebar-content', ['options' => [
-                        ['link' => '/jobs', 'value' => 'Tìm kiếm công việc'],
-                        ['link' => '/jobs/search', 'value' => 'Nhận việc'],
-                        ['link' => '/jobs/create', 'value' => 'Tạo công việc mới'],
-                        ['link' => '/jobs', 'value' => 'Công việc đang xử lý'],
-                        ['link' => '/jobs', 'value' => 'Công việc cần xử lý']
+                        ['link' => route('jobs.index'), 'value' => 'Tìm kiếm công việc'],
+                        ['link' => route('jobs.create'), 'value' => 'Tạo công việc mới'],
                     ]])
     
                 </nav>
