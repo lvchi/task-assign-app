@@ -34,14 +34,6 @@ class JobAssignFactory extends Factory
                 'deny_reason' => $this->faker->jobTitle,
         ];
     }
-//
-//    public function configure()
-//    {
-//        return $this->afterCreating(function (TimeSheet $timeSheet) {
-//            TimeSheet::factory()->count(5)->create(
-//                ['job_assign_id' => $timeSheet->id]
-//            );
-//        });
-//    }
+
 
 }
