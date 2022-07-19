@@ -29,6 +29,9 @@ curl -sS https://getcomposer.org/installer | php
 php composer.phar install
 ```
 
+
+
+
 ### 1.3 Setup environment variables
 
 Copy a version `.env.example` -> `.env`
