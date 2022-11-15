@@ -7,7 +7,7 @@ RUN composer install
 
 
 
-FROM php:7.4-fpm
+FROM 446297481037.dkr.ecr.us-east-1.amazonaws.com/php:7.4-fpm
 RUN docker-php-ext-install pdo pdo_mysql
 
 # Copy the current project
