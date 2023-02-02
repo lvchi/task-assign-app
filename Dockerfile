@@ -1,4 +1,4 @@
-FROM 446297481037.dkr.ecr.us-east-1.amazonaws.com/composer:2.0.7 as builder
+FROM composer:2.0.7 as builder
 # Don't update to composer:latest because it contains some imcompability with Laravel 7
 
 WORKDIR /app
@@ -7,7 +7,7 @@ RUN composer install
 
 
 
-FROM 446297481037.dkr.ecr.us-east-1.amazonaws.com/php:7.4-fpm
+FROM php:7.4-fpm
 RUN docker-php-ext-install pdo pdo_mysql
 
 # Copy the current project
