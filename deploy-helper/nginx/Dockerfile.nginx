@@ -1,4 +1,4 @@
-FROM 446297481037.dkr.ecr.us-east-1.amazonaws.com/nginx:latest
+FROM nginx:latest
 
 COPY ./deploy-helper/nginx /etc/nginx/helper
 COPY ./public /var/www/public
